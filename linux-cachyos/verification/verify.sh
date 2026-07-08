@@ -15,13 +15,13 @@ if ! command -v cbmc &> /dev/null; then
     exit 1
 fi
 
-# Add YSU Engine's built Z3 binary to PATH
-export PATH="/home/yumin/NVME files/YSU-engine-main/YSU-engine-main/src/Y_lang/z3/build:$PATH"
+# Add YSU Engine's built Z3 binary to PATH, and fallback to local folder
+export PATH="/home/yumin/NVME files/YSU-engine-main/YSU-engine-main/src/Y_lang/z3/build:$DIR:$PATH"
 
 # Check if Z3 is available
 if ! command -v z3 &> /dev/null; then
-    echo "ERROR: z3 is not found in PATH or in the YSU Engine build directory."
-    echo "Please make sure Z3 is compiled in the YSU Engine folder."
+    echo "ERROR: z3 is not found in PATH, YSU Engine build directory, or verification folder."
+    echo "Please copy the z3 binary to the verification folder or run copy_z3.sh on the host."
     exit 1
 fi
 
