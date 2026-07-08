@@ -25,7 +25,7 @@ if ! command -v z3 &> /dev/null; then
     exit 1
 fi
 
-echo "[1/5] Verifying Bounded Round-Robin CPU Selection (harness_rr.c)..."
+echo "[1/8] Verifying Bounded Round-Robin CPU Selection (harness_rr.c)..."
 cbmc "$DIR/harness_rr.c" \
     --z3 \
     --pointer-check \
@@ -38,7 +38,7 @@ cbmc "$DIR/harness_rr.c" \
 echo "SUCCESS: Bounded Round-Robin CPU selection verified safe and correct."
 echo "---------------------------------------------------------------------"
 
-echo "[2/5] Verifying Flag-to-Bitmask Packing (harness_packing.c)..."
+echo "[2/8] Verifying Flag-to-Bitmask Packing (harness_packing.c)..."
 cbmc "$DIR/harness_packing.c" \
     --z3 \
     --pointer-check \
@@ -51,7 +51,7 @@ cbmc "$DIR/harness_packing.c" \
 echo "SUCCESS: Flag-to-Bitmask packing verified safe and correct."
 echo "---------------------------------------------------------------------"
 
-echo "[3/5] Verifying CPU Cluster Search (harness_cluster.c)..."
+echo "[3/8] Verifying CPU Cluster Search (harness_cluster.c)..."
 cbmc "$DIR/harness_cluster.c" \
     --z3 \
     --pointer-check \
@@ -64,7 +64,7 @@ cbmc "$DIR/harness_cluster.c" \
 echo "SUCCESS: CPU cluster search verified safe and correct."
 echo "---------------------------------------------------------------------"
 
-echo "[4/5] Verifying scx_bpfland Task Deadline & Slice Math (harness_bpfland_dl.c)..."
+echo "[4/8] Verifying scx_bpfland Task Deadline & Slice Math (harness_bpfland_dl.c)..."
 cbmc "$DIR/harness_bpfland_dl.c" \
     --z3 \
     --pointer-check \

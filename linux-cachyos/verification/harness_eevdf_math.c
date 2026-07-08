@@ -146,10 +146,16 @@ int main() {
     u64 avg = avg_vruntime(&cfs);
 
     // Assertions
-    // 1. If sum_weight is positive, average vruntime calculation should be safe
+    // 1. If sum_weight is positive, average vruntime must be a bounded offset from zero_vruntime.
+    //    The bound derives directly from the input constraints:
+    //      - sum_w_vruntime ∈ [-10^15, +10^15]  (declared above)
+    //      - sum_weight ∈ [1, 10^7]              (declared above)
+    //    Therefore delta = sum_w_vruntime / sum_weight ∈ [-10^15, +10^15].
+    //    This verifies avg_vruntime() didn't silently wrap or produce a result
+    //    outside the representable range for the given symbolic inputs.
     if (cfs.sum_weight > 0) {
-        // Safe execution guarantee (no division by zero occurred)
-        assert(true);
+        s64 diff = (s64)(avg - cfs.zero_vruntime);
+        assert(diff >= -1000000000000000LL && diff <= 1000000000000000LL);
     }
 
     // Test vruntime wrapping comparison properties

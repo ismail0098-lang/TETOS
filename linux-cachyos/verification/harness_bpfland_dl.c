@@ -108,6 +108,13 @@ int main() {
     s32 cpu;
 
     // Initialize inputs with non-deterministic values (CBMC symbols)
+    //
+    // NOTE on vtime bounds: In the real BPF scheduler, dsq_vtime and vtime_now
+    // are relative offsets from a per-DSQ epoch that gets periodically reset.
+    // They never approach UINT64_MAX. The bounds below (up to 10^12 ns ≈ 16 min)
+    // cover realistic scheduling horizons. Unbounded vtimes would trigger unsigned
+    // wrapping in (dsq_vtime + awake_vtime) which is intentional in the real
+    // scheduler but not what this harness models.
     __CPROVER_assume(p.scx.weight > 0 && p.scx.weight <= 10000); // Typical weight range in kernel
     __CPROVER_assume(slice_max >= 1000000ULL && slice_max <= 100000000ULL); // 1ms to 100ms
     __CPROVER_assume(slice_lag >= 1000000ULL && slice_lag <= 100000000ULL);
