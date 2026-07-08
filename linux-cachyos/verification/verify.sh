@@ -6,7 +6,7 @@ set -e
 # Base path
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-echo "=== Formally Verifying CachyOS POC Scheduler Logic using CBMC + Z3 ==="
+echo "=== Formally Verifying CachyOS Scheduler Logic & Settings using CBMC + Z3 ==="
 
 # Check if CBMC is available
 if ! command -v cbmc &> /dev/null; then
@@ -77,7 +77,7 @@ cbmc "$DIR/harness_bpfland_dl.c" \
 echo "SUCCESS: scx_bpfland task deadline and slice math verified safe and correct."
 echo "---------------------------------------------------------------------"
 
-echo "[5/6] Verifying BORE Scheduler Math Logic (harness_bore_math.c)..."
+echo "[5/8] Verifying BORE Scheduler Math Logic (harness_bore_math.c)..."
 cbmc "$DIR/harness_bore_math.c" \
     --z3 \
     --pointer-check \
@@ -90,7 +90,7 @@ cbmc "$DIR/harness_bore_math.c" \
 echo "SUCCESS: BORE scheduler math logic verified safe and correct."
 echo "---------------------------------------------------------------------"
 
-echo "[6/6] Verifying EEVDF Core Scheduling Math (harness_eevdf_math.c)..."
+echo "[6/8] Verifying EEVDF Core Scheduling Math (harness_eevdf_math.c)..."
 cbmc "$DIR/harness_eevdf_math.c" \
     --z3 \
     --pointer-check \
@@ -101,4 +101,30 @@ cbmc "$DIR/harness_eevdf_math.c" \
     --trace
 
 echo "SUCCESS: EEVDF core scheduling math verified safe and correct."
+echo "---------------------------------------------------------------------"
+
+echo "[7/8] Verifying Sysctl Memory & I/O Interaction Model (harness_sysctl_mem.c)..."
+cbmc "$DIR/harness_sysctl_mem.c" \
+    --z3 \
+    --pointer-check \
+    --bounds-check \
+    --div-by-zero-check \
+    --signed-overflow-check \
+    --unwind 10 \
+    --trace
+
+echo "SUCCESS: Sysctl memory reclaim & OOM interaction model verified safe."
+echo "---------------------------------------------------------------------"
+
+echo "[8/8] Verifying ZRAM Generator Allocation Math (harness_zram_math.c)..."
+cbmc "$DIR/harness_zram_math.c" \
+    --z3 \
+    --pointer-check \
+    --bounds-check \
+    --div-by-zero-check \
+    --signed-overflow-check \
+    --unwind 10 \
+    --trace
+
+echo "SUCCESS: ZRAM generator memory calculation verified correct."
 echo "====================================================================="
