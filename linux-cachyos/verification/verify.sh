@@ -77,7 +77,7 @@ cbmc "$DIR/harness_bpfland_dl.c" \
 echo "SUCCESS: scx_bpfland task deadline and slice math verified safe and correct."
 echo "---------------------------------------------------------------------"
 
-echo "[5/5] Verifying BORE Scheduler Math Logic (harness_bore_math.c)..."
+echo "[5/6] Verifying BORE Scheduler Math Logic (harness_bore_math.c)..."
 cbmc "$DIR/harness_bore_math.c" \
     --z3 \
     --pointer-check \
@@ -88,4 +88,17 @@ cbmc "$DIR/harness_bore_math.c" \
     --trace
 
 echo "SUCCESS: BORE scheduler math logic verified safe and correct."
+echo "---------------------------------------------------------------------"
+
+echo "[6/6] Verifying EEVDF Core Scheduling Math (harness_eevdf_math.c)..."
+cbmc "$DIR/harness_eevdf_math.c" \
+    --z3 \
+    --pointer-check \
+    --bounds-check \
+    --div-by-zero-check \
+    --signed-overflow-check \
+    --unwind 65 \
+    --trace
+
+echo "SUCCESS: EEVDF core scheduling math verified safe and correct."
 echo "====================================================================="
